@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=World
+comment1.params=mW\ mH\ sW\ sH
+comment1.target=World(int,\ int,\ int,\ int)
+comment2.params=
+comment2.target=void\ make()
+comment3.params=i\ dirtLine\ stoneLine
+comment3.target=java.awt.Color\ getColor(int,\ int,\ int)
+comment4.params=
+comment4.target=java.awt.Color[][]\ getMap()
+comment5.params=
+comment5.target=int\ getWidth()
+comment6.params=
+comment6.target=int\ getHeight()
+comment7.params=
+comment7.target=int\ gridWidth()
+comment8.params=
+comment8.target=int\ gridHeight()
+comment9.params=i\ j
+comment9.target=java.awt.Color\ atPos(int,\ int)
+numComments=10

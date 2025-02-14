@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Noise
+comment1.params=seed
+comment1.target=Noise(long)
+comment2.params=x\ y\ octaves\ lacunarity\ gain
+comment2.target=double\ generate(double,\ double,\ int,\ double,\ double)
+comment3.params=x\ y
+comment3.target=double\ noise(double,\ double)
+comment4.params=t
+comment4.target=double\ fade(double)
+comment5.params=t\ a\ b
+comment5.target=double\ lerp(double,\ double,\ double)
+comment6.params=hash\ x\ y
+comment6.target=double\ grad(int,\ double,\ double)
+numComments=7
