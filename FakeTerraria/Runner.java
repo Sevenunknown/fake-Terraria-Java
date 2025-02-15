@@ -3,8 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Runner extends JPanel implements ActionListener, KeyListener {
-    private static final int TILE_VIEW_WIDTH = 10;
-    private static final int TILE_VIEW_HEIGHT = 15;
+    private static final int TILE_VIEW_WIDTH = 20;
+    private static final int TILE_VIEW_HEIGHT = 50;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -63,7 +63,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener {
         }
         
         g.setColor(Color.RED);
-        g.fillRect((int)(player.getX() - xOffset), (int)(player.getY() - yOffset), player.getWidth(), player.getHeight());
+        g.fillRect((int)(player.getX()), (int)(player.getY()), player.getWidth(), player.getHeight());
         
     }
 
