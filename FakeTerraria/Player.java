@@ -24,33 +24,33 @@ public class Player {
         map = MP;
     }
 
-    public void update(double xOffset, double yOffset) {
+    public void update(double xOffset, double yOffset, int tileWidth, int tileHeight) {
         int worldWidth = map.getWidth();
         int worldHeight = map.getHeight();
 
         boolean onGround = false;
 
-        int gridX = (int) ((X + xOffset) / map.gridWidth());
-        int bottomGridY = (int) ((Y + yOffset + Height) / map.gridHeight());
+        int gridX = (int) ((X + xOffset) / tileWidth);
+        int bottomGridY = (int) ((Y + yOffset + Height)/ tileHeight);
 
         // Debugging: Print player's current position and velocity
-        System.out.println("Player Position: (" + X + ", " + Y + ")");
-        System.out.println("Player Velocity: (" + velocityX + ", " + velocityY + ")");
-        System.out.println("Grid Position: (" + gridX + ", " + bottomGridY + ")");
+        //System.out.println("Player Position: (" + X + ", " + Y + ")");
+        //System.out.println("Player Velocity: (" + velocityX + ", " + velocityY + ")");
+        //System.out.println("Grid Position: (" + gridX + ", " + bottomGridY + ")");
 
         // Ensure player doesn't fall below the map
         if (bottomGridY >= worldHeight) {
             onGround = true;
-            Y = worldHeight * map.gridHeight() - Height; // Align to the last row of the map
+            Y = worldHeight * tileHeight - Height; // Align to the last row of the map
             velocityY = 0;
-            System.out.println("Hit bottom of map, adjusting Y to: " + Y);
+            //System.out.println("Hit bottom of map, adjusting Y to: " + Y);
         } else if (gridX >= 0 && gridX < worldWidth) {
             for (Color groundColor : c.ground) {
                 if (map.atPos(bottomGridY, gridX).equals(groundColor)) {
                     onGround = true;
-                    Y = (bottomGridY * map.gridHeight()) - Height;
+                    Y = (bottomGridY * tileHeight) - Height;
                     velocityY = 0;
-                    System.out.println("Landed on ground at: " + Y);
+                    //System.out.println("Landed on ground at: " + Y);
                     break;
                 }
             }
@@ -62,25 +62,14 @@ public class Player {
 
             // Predict next Y position
             double nextY = Y + velocityY;
-            int nextBottomGridY = (int) ((nextY + Height) / map.gridHeight())+map.gridHeight();
+            int nextBottomGridY = (int) ((nextY + Height) / map.gridHeight());
 
-            System.out.println("Predicted next Y: " + nextY + ", Next Grid Y: " + nextBottomGridY);
-
-            if (nextBottomGridY < worldHeight) {
-                for (Color groundColor : c.ground) {
-                    if (map.atPos(nextBottomGridY, gridX).equals(groundColor)) {
-                        velocityY = 0;
-                        Y = (nextBottomGridY * map.gridHeight()) - Height;
-                        System.out.println("Collision predicted, adjusting Y to: " + Y);
-                        return;
-                    }
-                }
-            }
+            //System.out.println("Predicted next Y: " + nextY + ", Next Grid Y: " + nextBottomGridY);
         }
 
         // Apply velocity if no collision
         Y += velocityY;
-        System.out.println("Updated Player Y: " + Y);
+        //System.out.println("Updated Player Y: " + Y);
     }
 
     public int getX() {

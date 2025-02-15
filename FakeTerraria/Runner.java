@@ -3,8 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Runner extends JPanel implements ActionListener, KeyListener {
-    private static final int TILE_VIEW_WIDTH = 20;
-    private static final int TILE_VIEW_HEIGHT = 50;
+    private static final int TILE_VIEW_WIDTH = 10;
+    private static final int TILE_VIEW_HEIGHT = 20;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -21,6 +21,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener {
     private static final double ACCELERATION = 1;  // Lower acceleration for finer control
     private static final double MAX_SPEED = 20;     // Lower max speed to prevent chunky jumps
     private static final double FRICTION = 1;      // Lower friction for smoother stopping
+    
+    public int tileWidth, tileHeight;
 
     Timer timer = new Timer(16, this); // 60 FPS (16ms per frame)
     //(int mW, int mH, int sW, int sH)
@@ -33,7 +35,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener {
         timer.start();
         setFocusable(true);
         addKeyListener(this);
-        player =  new Player(100, 0, 20, 40);
+        player =  new Player(500, 100, 20, 40);
         player.setMap(map);
     }
 
@@ -44,8 +46,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener {
         int screenWidth = getWidth();
         int screenHeight = getHeight();
 
-        int tileWidth = screenWidth / TILE_VIEW_WIDTH;
-        int tileHeight = screenHeight / TILE_VIEW_HEIGHT;
+        tileWidth = screenWidth / TILE_VIEW_WIDTH;
+        tileHeight = screenHeight / TILE_VIEW_HEIGHT;
         
         for (int i = 0; i < TILE_VIEW_HEIGHT + 1; i++) {
             for (int j = 0; j < TILE_VIEW_WIDTH + 1; j++) {
@@ -69,7 +71,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        player.update(xOffset, yOffset);
+        player.update(xOffset, yOffset, tileWidth, tileHeight);
         
         int tileWidth = getWidth() / TILE_VIEW_WIDTH;
         int tileHeight = getHeight() / TILE_VIEW_HEIGHT;
