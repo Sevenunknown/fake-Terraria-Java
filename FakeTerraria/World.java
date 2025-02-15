@@ -6,7 +6,7 @@ public class World {
     private int screenWidth, screenHeight;
     
     private int skyHeight;
-    private static int SEED = 5;
+    private static int SEED = 69;
     
     private static final Colors color = new Colors();
     private static final Noise noise = new Noise(SEED);
@@ -30,10 +30,10 @@ public class World {
         for (int j = 0; j < mapWidth; j++) {
             // Generate terrain heights using noise based on X (j)
             double dirtNoise = noise.generate(j * 0.1, 0, 3, 1, 0.5);  // Use scaled noise
-            double stoneNoise = noise.generate(j * 0.1, 1, 3, 2, 0.4); // Another scaled noise
+            double stoneNoise = noise.generate(j * 0.1, -1, 3, 2, 0.4); // Another scaled noise
             
             int dirtLine = skyHeight + (int) ((dirtNoise + 1) / 2 * (mapHeight / 5));
-            int stoneLine = dirtLine + (int) ((stoneNoise + 1) / 2 * (mapHeight / 10));
+            int stoneLine = 10+dirtLine + (int) ((stoneNoise + 1) / 2 * (mapHeight / 10));
             
             for (int i = 0; i < mapHeight; i++) {
                 map[i][j] = getColor(i, dirtLine, stoneLine);
@@ -46,6 +46,12 @@ public class World {
         if (i == dirtLine) return Colors.GRASS_GREEN;
         if (i > dirtLine && i < stoneLine) return Colors.DIRT_BROWN;
         return Colors.STONE_GRAY;
+    }
+    
+    public void setPos(int i, int j, Color c)
+    {
+        map[i][j] = c;
+        System.out.println(i +","+j);
     }
     
     public Color[][] getMap() { return map; }

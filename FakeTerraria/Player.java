@@ -4,14 +4,17 @@ public class Player {
     private double X, Y;
     private int Width, Height;
     private World map;
-    private int mass = 10;
-    private double G = 0.2;
+    private int mass = 1;
+    private double G = 2;
     private static final Colors c = new Colors();
 
     private double velocityX = 0, velocityY = 0;
-    private static final double MAX_SPEED = 5;
+    private static final double MAX_FALL_SPEED = 20;
     private static final double ACCELERATION = 0.5;
     private static final double FRICTION = 0.2;
+    private static final double MAX_SPEED = 20;
+    
+    private boolean onGround;
 
     public Player(int startX, int startY, int width, int height) {
         X = startX;
@@ -28,7 +31,7 @@ public class Player {
         int worldWidth = map.getWidth();
         int worldHeight = map.getHeight();
 
-        boolean onGround = false;
+        onGround = false;
 
         int gridX = (int) ((X + xOffset) / tileWidth);
         int bottomGridY = (int) ((Y + yOffset + Height)/ tileHeight);
@@ -57,8 +60,8 @@ public class Player {
         }
 
         if (!onGround) {
-            velocityY += G;
-            if (velocityY > MAX_SPEED) velocityY = MAX_SPEED;
+            velocityY += G*mass;
+            if (velocityY > MAX_FALL_SPEED) velocityY = MAX_FALL_SPEED;
 
             // Predict next Y position
             double nextY = Y + velocityY;
@@ -71,11 +74,44 @@ public class Player {
         Y += velocityY;
         //System.out.println("Updated Player Y: " + Y);
     }
+    
 
+
+    // Check if the player can move right
+    public boolean move(double velX, double xOffset, double yOffset, int tileWidth, int tileHeight) {
+        int worldWidth = map.getWidth();    
+        int nextGridX = (int) ((X + xOffset + velX) / tileWidth); // Move right (positive velocity)
+        int bottomGridY = (int) ((Y + Height+yOffset-tileHeight/2) / tileHeight);
+        int topGridY = (int) (Y /tileHeight);
+
+        if (nextGridX >= 0 && nextGridX < worldWidth) {
+            for (Color groundColor : c.ground) {
+                if (map.atPos(topGridY, nextGridX).equals(groundColor) ||
+                    map.atPos(bottomGridY, nextGridX).equals(groundColor))
+                {
+                    return false; // Blocked, don't move
+                }
+            }
+        }
+        return true; // Safe to move
+    }
+
+    
+    public void setVel(int val)
+    {
+        velocityY = val;
+        Y+=velocityY;
+    }
+    
+    public boolean onGround()
+    {
+        return onGround;
+    }
+    
     public int getX() {
         return (int) X;
     }
-
+    
     public int getY() {
         return (int) Y;
     }
