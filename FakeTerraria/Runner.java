@@ -102,6 +102,10 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
             velocityY += G*player.getMass();
             yOffset = Math.max(0, Math.min(maxYOffset, yOffset + velocityY));
         }
+        else
+        {
+            velocityY = 0;
+        }
         
         // Movement logic for left and right
         if (leftPressed) 

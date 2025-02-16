@@ -6,7 +6,7 @@ public class Noise {
 
     public Noise(long seed) {
         random = new Random(seed);
-        permutationTable = new int[512];
+        permutationTable = new int[256];
 
         // Initialize and shuffle permutation table
         for (int i = 0; i < 256; i++) {
@@ -20,7 +20,7 @@ public class Noise {
             permutationTable[swapIndex] = temp;
         }
 
-        System.arraycopy(permutationTable, 0, permutationTable, 256, 256);
+        
     }
 
     public double generate(double x, double y, int octaves, double lacunarity, double gain) {
@@ -48,11 +48,11 @@ public class Noise {
         double u = fade(x);
         double v = fade(y);
 
-        int a = permutationTable[X] + Y;
+        int a = permutationTable[X & 255] + Y;
         int b = permutationTable[(X + 1) & 255] + Y;
 
-        return lerp(v, lerp(u, grad(permutationTable[a], x, y), grad(permutationTable[b], x - 1, y)),
-                lerp(u, grad(permutationTable[a + 1], x, y - 1), grad(permutationTable[b + 1], x - 1, y - 1)));
+        return lerp(v, lerp(u, grad(permutationTable[a & 255], x, y), grad(permutationTable[b & 255], x - 1, y)),
+                lerp(u, grad(permutationTable[a & 254 + 1], x, y - 1), grad(permutationTable[b & 254 + 1], x - 1, y - 1)));
     }
 
     private double fade(double t) {

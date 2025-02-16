@@ -81,7 +81,7 @@ public class Player {
         int worldHeight = map.getHeight();
         
         int gridX = (int) ((X + xOffset) / tileWidth);
-        int bottomGridY = (int) ((Y + Height) / tileHeight);
+        int bottomGridY = (int) ((Y + Height-1) / tileHeight);
     
         // Bounds check to prevent out-of-bounds access
         if (gridX < 0 || gridX >= worldWidth || bottomGridY < 0 || bottomGridY >= worldHeight) {

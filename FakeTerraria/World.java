@@ -29,8 +29,8 @@ public class World {
     public void make() {
         for (int j = 0; j < mapWidth; j++) {
             // Generate terrain heights using noise based on X (j)
-            double dirtNoise = noise.generate(j * 0.1, 0, 3, 1, 0.5);  // Use scaled noise
-            double stoneNoise = noise.generate(j * 0.1, -1, 3, 2, 0.4); // Another scaled noise
+            double dirtNoise = noise.generate((j & 255) * 0.1, 0, 3, 1, 0.5);  // Use scaled noise
+            double stoneNoise = noise.generate((j & 255) * 0.1, -1, 3, 2, 0.4); // Another scaled noise
             
             int dirtLine = skyHeight + (int) ((dirtNoise + 1) / 2 * (mapHeight / 5));
             int stoneLine = 10+dirtLine + (int) ((stoneNoise + 1) / 2 * (mapHeight / 10));
