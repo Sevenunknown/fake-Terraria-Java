@@ -75,7 +75,28 @@ public class Player {
         //System.out.println("Updated Player Y: " + Y);
     }
     
+    
+    public boolean fall(double velY, double xOffset, double yOffset, int tileWidth, int tileHeight) {
+        int worldWidth = map.getWidth();
+        int worldHeight = map.getHeight();
+        
+        int gridX = (int) ((X + xOffset) / tileWidth);
+        int bottomGridY = (int) ((Y + Height) / tileHeight);
+    
+        // Bounds check to prevent out-of-bounds access
+        if (gridX < 0 || gridX >= worldWidth || bottomGridY < 0 || bottomGridY >= worldHeight) {
+            return true; // Assume falling if outside map bounds
+        }
+    
+        for (Color groundColor : c.ground) {
+            if (map.atPos(bottomGridY, gridX).equals(groundColor)) {
+                return false; // Landed on solid ground
+            }
+        }
+        return true;
+    }
 
+    
 
     // Check if the player can move right
     public boolean move(double velX, double xOffset, double yOffset, int tileWidth, int tileHeight) {
@@ -101,6 +122,11 @@ public class Player {
     {
         velocityY = val;
         Y+=velocityY;
+    }
+    
+    public int getMass()
+    {
+        return mass;
     }
     
     public boolean onGround()

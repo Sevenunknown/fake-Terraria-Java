@@ -23,6 +23,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private static final double ACCELERATION = 1;
     private static final double MAX_SPEED = 20;
     private static final double FRICTION = 1;
+    public static double G = 1;
 
     public int tileWidth, tileHeight;
 
@@ -47,41 +48,64 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+    
         int screenWidth = getWidth();
         int screenHeight = getHeight();
-
-        tileWidth = screenWidth / TILE_VIEW_WIDTH;
-        tileHeight = screenHeight / TILE_VIEW_HEIGHT;
-
-        for (int i = 0; i < TILE_VIEW_HEIGHT + 1; i++) {
-            for (int j = 0; j < TILE_VIEW_WIDTH + 1; j++) {
-                int worldX = (int) (xOffset / tileWidth) + j;
-                int worldY = (int) (yOffset / tileHeight) + i;
-
-                if (worldX >= map.getWidth() || worldY >= map.getHeight() || worldX < 0 || worldY < 0)
-                    continue;
-                Color tileColor = map.atPos(worldY, worldX);
+    
+        // Ensure square tiles
+        int tileSize = Math.min(screenWidth / TILE_VIEW_WIDTH, screenHeight / TILE_VIEW_HEIGHT);
+        tileWidth = tileSize;
+        tileHeight = tileSize;
+    
+        // Calculate how many tiles fit in the view, and add extra coverage to avoid gaps
+        int extraTiles = 30; // Prevents gaps when scrolling
+        int startX = Math.max(0, (int) (xOffset / tileWidth));
+        int startY = Math.max(0, (int) (yOffset / tileHeight));
+        int endX = Math.min(map.getWidth(), startX + TILE_VIEW_WIDTH + extraTiles);
+        int endY = Math.min(map.getHeight(), startY + TILE_VIEW_HEIGHT + extraTiles);
+    
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
+                Color tileColor = map.atPos(i, j);
                 g.setColor(tileColor);
-                g.fillRect((int) (j * tileWidth - (xOffset % tileWidth)), 
-                           (int) ((i) * tileHeight - (yOffset % tileHeight)), 
-                           tileWidth, tileHeight);
+    
+                int drawX = (j * tileWidth - (int) xOffset);
+                int drawY = (i * tileHeight - (int) yOffset);
+    
+                g.fillRect(drawX, drawY, tileWidth, tileHeight);
             }
         }
-
+    
+        // Draw the player
         g.setColor(Color.RED);
-        g.fillRect(screenWidth / 2, player.getY(), player.getWidth(), player.getHeight());
+        g.fillRect(screenWidth / 2 - player.getWidth() / 2, player.getY(), player.getWidth(), player.getHeight());
     }
+
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        player.update(xOffset, yOffset, tileWidth, tileHeight);
+        //player.update(xOffset, yOffset, tileWidth, tileHeight);
+        //double velY, double xOffset, double yOffset, int tileWidth, int tileHeight
 
+        // Now print the updated result of fall() at the same position
+        
+        boolean shouldFall = player.fall(velocityY, xOffset, yOffset, tileWidth, tileHeight);
+        //System.out.println(velocityY +" " +xOffset +" " +yOffset +" " +tileWidth +" " +tileHeight);
+        
         int maxXOffset = Math.max(0, map.getWidth() * tileWidth - getWidth());
         int maxYOffset = Math.max(0, map.getHeight() * tileHeight - getHeight());
-
+        
+        if (shouldFall)
+        {
+            velocityY += G*player.getMass();
+            yOffset = Math.max(0, Math.min(maxYOffset, yOffset + velocityY));
+        }
+        
         // Movement logic for left and right
-        if (leftPressed) {
+        if (leftPressed) 
+        {
             velocityX -= ACCELERATION; // Move left
             velocityX = Math.max(-MAX_SPEED, velocityX); // Cap max speed
             //double velX, double xOffset, double yOffset, int tileWidth, int tileHeight
@@ -92,7 +116,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
             else { velocityX = 0;
             }
         }
-        if (rightPressed) {
+        if (rightPressed) 
+        {
             velocityX += ACCELERATION; // Move right
             velocityX = Math.min(MAX_SPEED, velocityX); // Cap max speed
             if (player.move(velocityX, xOffset, yOffset, tileWidth, tileHeight))
@@ -102,7 +127,9 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
             else { velocityX = 0;
             }
         }
-
+        
+        
+        
         // Apply friction when no keys are pressed
         if (!leftPressed && !rightPressed) {
             if (velocityX > 0) velocityX = Math.max(0, velocityX - FRICTION);
@@ -114,6 +141,9 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
             player.setVel(-20);
         }
         xOffset = Math.max(0, Math.min(maxXOffset, xOffset + velocityX));
+
+
+        
         repaint();
     }
 

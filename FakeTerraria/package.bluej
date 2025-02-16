@@ -1,15 +1,15 @@
 #BlueJ package file
-dependency1.from=Player
-dependency1.to=World
+dependency1.from=World
+dependency1.to=Colors
 dependency1.type=UsesDependency
-dependency2.from=Player
-dependency2.to=Colors
+dependency2.from=World
+dependency2.to=Noise
 dependency2.type=UsesDependency
-dependency3.from=World
-dependency3.to=Colors
+dependency3.from=Player
+dependency3.to=World
 dependency3.type=UsesDependency
-dependency4.from=World
-dependency4.to=Noise
+dependency4.from=Player
+dependency4.to=Colors
 dependency4.type=UsesDependency
 dependency5.from=Runner
 dependency5.to=World

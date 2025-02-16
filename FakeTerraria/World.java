@@ -51,7 +51,7 @@ public class World {
     public void setPos(int i, int j, Color c)
     {
         map[i][j] = c;
-        System.out.println(i +","+j);
+        //System.out.println(i +","+j);
     }
     
     public Color[][] getMap() { return map; }
