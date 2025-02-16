@@ -181,7 +181,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         int mouseY = e.getY();
         int mouseGX = (int) (mouseX + xOffset)/tileWidth;
         int mouseGY = (int) (mouseY + yOffset)/tileHeight;
-        map.setPos(mouseGY, mouseGX, color.SKY_BLUE);
+        
+        map.breakBlock(mouseGY, mouseGX);
     }
 
     @Override
