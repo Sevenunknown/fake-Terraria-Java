@@ -49,7 +49,7 @@ public class Player {
             //System.out.println("Hit bottom of map, adjusting Y to: " + Y);
         } else if (gridX >= 0 && gridX < worldWidth) {
             for (Color groundColor : c.ground) {
-                if (map.atPos(bottomGridY, gridX).equals(groundColor)) {
+                if (c.NumToColor.get(map.atPos(bottomGridY, gridX)) == (groundColor)) {
                     onGround = true;
                     Y = (bottomGridY * tileHeight) - Height;
                     velocityY = 0;
@@ -90,7 +90,7 @@ public class Player {
         }
     
         for (Color groundColor : c.ground) {
-            if (map.atPos(bottomGridY, gridX).equals(groundColor)) {
+            if (c.NumToColor.get(map.atPos(bottomGridY, gridX)) == groundColor) {
                 velocityY = 0;
                 return false; // Landed on solid ground
             }
@@ -109,8 +109,8 @@ public class Player {
 
         if (nextGridX >= 0 && nextGridX < worldWidth) {
             for (Color groundColor : c.ground) {
-                if (map.atPos(topGridY, nextGridX).equals(groundColor) ||
-                    map.atPos(bottomGridY, nextGridX).equals(groundColor))
+                if (c.NumToColor.get(map.atPos(topGridY, nextGridX)) == groundColor ||
+                    c.NumToColor.get(map.atPos(bottomGridY, nextGridX)) == groundColor)
                 {
                     return false; // Blocked, don't move
                 }

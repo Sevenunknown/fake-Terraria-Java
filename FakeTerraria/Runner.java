@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
+
 
 public class Runner extends JPanel implements ActionListener, KeyListener,  MouseListener {
     private static final int TILE_VIEW_WIDTH = 10;
@@ -8,7 +10,9 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     
     private static final int worldWidth = 1000;
     private static final int worldHeight = 200;
-
+    
+     
+    
     private double xOffset = 0;
     private double yOffset = 0;
 
@@ -28,10 +32,12 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
 
     public int tileWidth, tileHeight;
 
-    Timer timer = new Timer(16, this); // 60 FPS (16ms per frame)
+    Timer timer = new Timer(16, this); // 60 FPS (16ms per f    rame)
     private static final World map = new World(worldWidth, worldHeight, 1000, 700);
     private static final Colors color = new Colors();
-
+    
+    private HashMap<Integer, Color> NumToColor  = color.NumToColor;
+    
     private double playerX, playerY;
     private static int playerWidth, playerHeight;
     private Player player;
@@ -67,7 +73,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
-                Color tileColor = map.atPos(i, j);
+                int tileNum = map.atPos(i, j);
+                Color tileColor = NumToColor.get(tileNum);
                 g.setColor(tileColor);
     
                 int drawX = (j * tileWidth - (int) xOffset);

@@ -23,11 +23,10 @@ public class Noise {
         
     }
 
-    public double generate(double x, double y, int octaves, double lacunarity, double gain) {
+    public double generate(double x, double y, int octaves, double lacunarity, double gain, double maxValue) {
         double amplitude = 1;
         double frequency = 1;
         double total = 0;
-        double maxValue = 5;
 
         for (int i = 0; i < octaves; i++) {
             total += amplitude * noise(x * frequency, y * frequency);

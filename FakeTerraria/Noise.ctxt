@@ -2,8 +2,8 @@
 comment0.target=Noise
 comment1.params=seed
 comment1.target=Noise(long)
-comment2.params=x\ y\ octaves\ lacunarity\ gain
-comment2.target=double\ generate(double,\ double,\ int,\ double,\ double)
+comment2.params=x\ y\ octaves\ lacunarity\ gain\ maxValue
+comment2.target=double\ generate(double,\ double,\ int,\ double,\ double,\ double)
 comment3.params=x\ y
 comment3.target=double\ noise(double,\ double)
 comment4.params=t
