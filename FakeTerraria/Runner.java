@@ -21,7 +21,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private double velocityX = 0;
     private double velocityY = 0;
     private static final double ACCELERATION = 1;
-    private static final double MAX_SPEED = 20;
+    private static final double MAX_SPEED = 50;
     private static final double FRICTION = 1;
     public static double G = 1;
 
@@ -86,7 +86,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //player.update(xOffset, yOffset, tileWidth, tileHeight);
+        //player.update(0, 0, tileWidth, tileHeight);
         //double velY, double xOffset, double yOffset, int tileWidth, int tileHeight
 
         // Now print the updated result of fall() at the same position
@@ -96,7 +96,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         
         int maxXOffset = Math.max(0, map.getWidth() * tileWidth - getWidth());
         int maxYOffset = Math.max(0, map.getHeight() * tileHeight - getHeight());
-        
+        System.out.println(shouldFall);
         if (shouldFall)
         {
             velocityY += G*player.getMass();
@@ -140,9 +140,9 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
             else if (velocityX < 0) velocityX = Math.min(0, velocityX + FRICTION);
         }
         
-        if (spacePressed && player.onGround())
+        if (spacePressed && !shouldFall)
         {
-            player.setVel(-20);
+            velocityY = 20;
         }
         xOffset = Math.max(0, Math.min(maxXOffset, xOffset + velocityX));
 

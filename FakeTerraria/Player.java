@@ -9,7 +9,7 @@ public class Player {
     private static final Colors c = new Colors();
 
     private double velocityX = 0, velocityY = 0;
-    private static final double MAX_FALL_SPEED = 20;
+    private static final double MAX_FALL_SPEED = 50;
     private static final double ACCELERATION = 0.5;
     private static final double FRICTION = 0.2;
     private static final double MAX_SPEED = 20;
@@ -81,27 +81,29 @@ public class Player {
         int worldHeight = map.getHeight();
         
         int gridX = (int) ((X + xOffset) / tileWidth);
-        int bottomGridY = (int) ((Y + Height-1) / tileHeight);
+        int bottomGridY = (int) ((Y + Height) / tileHeight);
     
         // Bounds check to prevent out-of-bounds access
         if (gridX < 0 || gridX >= worldWidth || bottomGridY < 0 || bottomGridY >= worldHeight) {
+            velocityY = Math.max(-MAX_FALL_SPEED, Math.min(MAX_FALL_SPEED, velocityY+G*mass));
             return true; // Assume falling if outside map bounds
         }
     
         for (Color groundColor : c.ground) {
             if (map.atPos(bottomGridY, gridX).equals(groundColor)) {
+                velocityY = 0;
                 return false; // Landed on solid ground
             }
         }
+        Y += velocityY;
         return true;
     }
 
     
 
-    // Check if the player can move right
     public boolean move(double velX, double xOffset, double yOffset, int tileWidth, int tileHeight) {
         int worldWidth = map.getWidth();    
-        int nextGridX = (int) ((X + xOffset + velX) / tileWidth); // Move right (positive velocity)
+        int nextGridX = (int) ((X + xOffset + velX) / tileWidth);
         int bottomGridY = (int) ((Y + Height+yOffset-tileHeight/2) / tileHeight);
         int topGridY = (int) (Y /tileHeight);
 
