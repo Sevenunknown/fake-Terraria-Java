@@ -6,8 +6,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private static final int TILE_VIEW_WIDTH = 10;
     private static final int TILE_VIEW_HEIGHT = 20;
     
-    private static final int worldWidth = 100;
-    private static final int worldHeight = 50;
+    private static final int worldWidth = 1000;
+    private static final int worldHeight = 200;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -21,9 +21,10 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private double velocityX = 0;
     private double velocityY = 0;
     private static final double ACCELERATION = 1;
-    private static final double MAX_SPEED = 50;
+    private static final double MAX_SPEED = 20;
+    private static final double MAX_FALL_SPEED = 20;
     private static final double FRICTION = 1;
-    public static double G = 1;
+    public static double G = 2;
 
     public int tileWidth, tileHeight;
 
@@ -40,7 +41,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);  // This line is needed
-        player = new Player(500, 350, 20, 40);
+        player = new Player(500, 100, 20, 40);
         player.setMap(map);
     }
 
@@ -96,7 +97,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         
         int maxXOffset = Math.max(0, map.getWidth() * tileWidth - getWidth());
         int maxYOffset = Math.max(0, map.getHeight() * tileHeight - getHeight());
-        System.out.println(shouldFall);
+        //System.out.println(shouldFall);
         if (shouldFall)
         {
             velocityY += G;

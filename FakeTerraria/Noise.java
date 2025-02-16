@@ -27,7 +27,7 @@ public class Noise {
         double amplitude = 1;
         double frequency = 1;
         double total = 0;
-        double maxValue = 0;
+        double maxValue = 5;
 
         for (int i = 0; i < octaves; i++) {
             total += amplitude * noise(x * frequency, y * frequency);

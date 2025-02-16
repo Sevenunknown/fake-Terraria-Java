@@ -5,11 +5,11 @@ public class Player {
     private int Width, Height;
     private World map;
     private int mass = 1;
-    private double G = 1;
+    private double G = 2;
     private static final Colors c = new Colors();
 
     private double velocityX = 0, velocityY = 0;
-    private static final double MAX_FALL_SPEED = 50;
+    private static final double MAX_FALL_SPEED = 20;
     private static final double ACCELERATION = 0.5;
     private static final double FRICTION = 0.2;
     private static final double MAX_SPEED = 20;
