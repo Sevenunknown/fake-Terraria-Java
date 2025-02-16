@@ -99,13 +99,13 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         System.out.println(shouldFall);
         if (shouldFall)
         {
-            velocityY += G*player.getMass();
-            yOffset = Math.max(0, Math.min(maxYOffset, yOffset + velocityY));
+            velocityY += G;
         }
         else
         {
             velocityY = 0;
         }
+        
         
         // Movement logic for left and right
         if (leftPressed) 
@@ -142,10 +142,10 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         
         if (spacePressed && !shouldFall)
         {
-            velocityY = 20;
+            velocityY = -10;
         }
         xOffset = Math.max(0, Math.min(maxXOffset, xOffset + velocityX));
-
+        yOffset = Math.max(0, Math.min(maxYOffset, yOffset + velocityY));
 
         
         repaint();

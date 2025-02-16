@@ -5,7 +5,7 @@ public class Player {
     private int Width, Height;
     private World map;
     private int mass = 1;
-    private double G = 2;
+    private double G = 1;
     private static final Colors c = new Colors();
 
     private double velocityX = 0, velocityY = 0;
@@ -81,11 +81,11 @@ public class Player {
         int worldHeight = map.getHeight();
         
         int gridX = (int) ((X + xOffset) / tileWidth);
-        int bottomGridY = (int) ((Y + Height) / tileHeight);
+        int bottomGridY = (int) ((Y + Height+yOffset) / tileHeight);
     
         // Bounds check to prevent out-of-bounds access
         if (gridX < 0 || gridX >= worldWidth || bottomGridY < 0 || bottomGridY >= worldHeight) {
-            velocityY = Math.max(-MAX_FALL_SPEED, Math.min(MAX_FALL_SPEED, velocityY+G*mass));
+            velocityY = Math.max(-MAX_FALL_SPEED, Math.min(MAX_FALL_SPEED, velocityY+G));
             return true; // Assume falling if outside map bounds
         }
     

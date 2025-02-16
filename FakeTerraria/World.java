@@ -6,7 +6,7 @@ public class World {
     private int screenWidth, screenHeight;
     
     private int skyHeight;
-    private static int SEED = 69;
+    private static int SEED = 39;
     
     private static final Colors color = new Colors();
     private static final Noise noise = new Noise(SEED);
@@ -21,7 +21,7 @@ public class World {
         screenHeight = sH;
         tileWidth = screenWidth / mapWidth;
         tileHeight = screenHeight / mapHeight;
-        skyHeight = mapHeight / 5;
+        skyHeight = mapHeight / 4;
         map = new Color[mapHeight][mapWidth];
         make();
     }
