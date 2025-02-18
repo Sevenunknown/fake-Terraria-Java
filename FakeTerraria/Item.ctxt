@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Item
+comment1.params=stackNum\ nm\ canPlace\ cl
+comment1.target=Item(int,\ java.lang.String,\ boolean,\ java.awt.Color)
+comment2.params=
+comment2.target=int\ getStackSize()
+comment3.params=
+comment3.target=java.lang.String\ getName()
+comment4.params=
+comment4.target=boolean\ canPlace()
+comment5.params=
+comment5.target=java.awt.Color\ getColor()
+comment6.params=
+comment6.target=java.lang.String\ toString()
+numComments=7

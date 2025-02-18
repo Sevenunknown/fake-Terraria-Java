@@ -15,6 +15,9 @@ public class Player {
     private static final double MAX_SPEED = 20;
     
     private boolean onGround;
+    
+    private static final Inventory Inv = new Inventory();
+    
 
     public Player(int startX, int startY, int width, int height) {
         X = startX;
@@ -82,6 +85,7 @@ public class Player {
         
         int gridX = (int) ((X + xOffset) / tileWidth);
         int bottomGridY = (int) ((Y + Height+yOffset) / tileHeight);
+        int topGridY = (int) ((Y +yOffset) / tileHeight);
     
         // Bounds check to prevent out-of-bounds access
         if (gridX < 0 || gridX >= worldWidth || bottomGridY < 0 || bottomGridY >= worldHeight) {
@@ -106,7 +110,7 @@ public class Player {
         int nextGridX = (int) ((X + xOffset + velX) / tileWidth);
         int bottomGridY = (int) ((Y + Height+yOffset-tileHeight/2) / tileHeight);
         int topGridY = (int) (Y /tileHeight);
-
+        
         if (nextGridX >= 0 && nextGridX < worldWidth) {
             for (Color groundColor : c.ground) {
                 if (c.NumToColor.get(map.atPos(topGridY, nextGridX)) == groundColor ||
@@ -119,6 +123,10 @@ public class Player {
         return true; // Safe to move
     }
 
+    public boolean giveItem(Item itm)
+    {
+        return Inv.addToInventory(itm);
+    }
     
     public void setVel(int val)
     {
@@ -151,4 +159,16 @@ public class Player {
     public int getHeight() {
         return Height;
     }
+    
+    public Inventory getInventory()
+    {
+        return Inv;
+    }
+    
+    public Item[] getInventoryItems()
+    {
+        return Inv.getInventory();
+    }
+    
+    
 }

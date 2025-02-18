@@ -19,7 +19,9 @@ public class Colors
     public static Color SUNRISE_PINK = new Color(255, 160, 122);
 
     public static Color[] sky = {SKY_BLUE, LIGHT_BLUE, MIDNIGHT_BLUE, SUNSET_ORANGE, NIGHT_PURPLE, CLOUD_WHITE, STARRY_YELLOW, DARK_SKY_BLUE, DUSK_PURPLE, SUNRISE_PINK};
-
+    
+    
+    
     // --- Ground and Terrain Colors ---
     public static Color DIRT_BROWN = new Color(139, 69, 19);
     public static Color LIGHT_BROWN = new Color(160, 82, 45);
@@ -32,7 +34,7 @@ public class Colors
     public static Color LAVA_RED = new Color(207, 16, 32);
     public static Color ASH_GRAY = new Color(178, 190, 181);
 
-    public static Color[] ground = {DIRT_BROWN, LIGHT_BROWN, GRASS_GREEN, STONE_GRAY, SAND_YELLOW, MUD_BROWN, CAVE_GRAY, SNOW_WHITE, LAVA_RED, ASH_GRAY};
+    public static Color[] ground = {DIRT_BROWN, LIGHT_BROWN, GRASS_GREEN, STONE_GRAY, SAND_YELLOW,MUD_BROWN, CAVE_GRAY, SNOW_WHITE, LAVA_RED, ASH_GRAY};
 
     // --- Water and Liquid Colors ---
     public static Color OCEAN_BLUE = new Color(0, 105, 148);
@@ -132,6 +134,7 @@ public class Colors
 
     public static Color[] dungeonColors = {BRICK_RED, TORCH_YELLOW, WALL_GRAY, FLOOR_BROWN, BLOOD_STAIN, CHAIN_SILVER, GOLDEN_STATUE, CANDLE_LIGHT, TREASURE_CHEST, SECRET_DOOR};
 
+    public static Color[] wood = {MUD_BROWN};
     
     public HashMap<Integer, Color> NumToColor = new HashMap<>();
         public HashMap<Integer, Color> SkyColors = new HashMap<>();
@@ -143,7 +146,10 @@ public class Colors
         public HashMap<Integer, Color> UIColors = new HashMap<>();
         public HashMap<Integer, Color> EffectColors = new HashMap<>();
         public HashMap<Integer, Color> DungeonColors = new HashMap<>();
-
+        public HashMap<Integer, Color> WoodColors = new HashMap<>();
+    
+        
+        
     public Colors() {
         int index = 0;
         for (Color c : sky) {
@@ -189,6 +195,12 @@ public class Colors
         for (Color c : dungeonColors) {
             NumToColor.put(index, c);
             DungeonColors.put(index, c);
+            index++;
+        }
+        for (Color c : wood)
+        {
+            NumToColor.put(index, c);
+            WoodColors.put(index, c);
             index++;
         }
     }

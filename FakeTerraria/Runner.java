@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 
 public class Runner extends JPanel implements ActionListener, KeyListener,  MouseListener {
-    private static final int TILE_VIEW_WIDTH = 10;
-    private static final int TILE_VIEW_HEIGHT = 20;
+    private static final int TILE_VIEW_WIDTH = 20;
+    private static final int TILE_VIEW_HEIGHT = 25;
     
     private static final int worldWidth = 1000;
     private static final int worldHeight = 200;
     
-     
+    
     
     private double xOffset = 0;
     private double yOffset = 0;
@@ -85,6 +85,27 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         }
     
         // Draw the player
+        int InvGridSize = 50;
+        Item[] inv = player.getInventoryItems();
+        for (int i = -1; i<2; i++)
+        {
+            g.setColor(Color.GRAY);
+            g.fillRect(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, InvGridSize, InvGridSize);
+            g.setColor(Color.BLACK);
+            g.drawLine(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+i*InvGridSize, getHeight()-100);
+            if (inv[i+1] != null)
+            {
+                g.setColor(inv[i+1].getColor());
+                g.fillRect(getWidth()/2+i*(InvGridSize)+InvGridSize/4, getHeight()-100-(InvGridSize)+InvGridSize/4, InvGridSize/2, InvGridSize/2);
+            }
+        }
+        
+        g.drawLine(getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100);
+        
+        g.drawLine(getWidth()/2-InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize);
+        g.drawLine(getWidth()/2-InvGridSize, getHeight()-100, getWidth()/2+2*InvGridSize, getHeight()-100);
+               
+        
         g.setColor(Color.RED);
         g.fillRect(screenWidth / 2 - player.getWidth() / 2, player.getY(), player.getWidth(), player.getHeight());
     }
@@ -108,6 +129,12 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         if (shouldFall)
         {
             velocityY += G;
+            if (player.move(velocityX, xOffset, yOffset, tileWidth, tileHeight))
+            {
+                xOffset = Math.max(0, Math.min(maxXOffset, xOffset + velocityX));
+            }    
+            else { velocityX = 0;
+            }
         }
         else
         {
@@ -175,6 +202,12 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         if (keyCode == KeyEvent.VK_UP) upPressed = false;
         if (keyCode == KeyEvent.VK_DOWN) downPressed = false;
         if (keyCode == KeyEvent.VK_SPACE) spacePressed = false;
+        if (keyCode == KeyEvent.VK_I)
+        {
+           Inventory INV = player.getInventory();
+           INV.printInventory();
+           System.out.println();
+        }
     }
 
     @Override
@@ -188,8 +221,14 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         int mouseY = e.getY();
         int mouseGX = (int) (mouseX + xOffset)/tileWidth;
         int mouseGY = (int) (mouseY + yOffset)/tileHeight;
-        
-        map.breakBlock(mouseGY, mouseGX);
+        Item itm = map.getBrokenItem(map.atPos(mouseGY, mouseGX));
+        if (itm != null)
+        {
+            if (player.giveItem(itm))
+            {
+                map.breakBlock(mouseGY, mouseGX);
+            }
+        }
     }
 
     @Override

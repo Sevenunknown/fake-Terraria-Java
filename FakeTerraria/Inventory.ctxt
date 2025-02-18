@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Inventory
+comment1.params=
+comment1.target=Inventory()
+comment2.params=itm
+comment2.target=boolean\ addToInventory(Item)
+comment3.params=
+comment3.target=Item[]\ getInventory()
+comment4.params=
+comment4.target=void\ printInventory()
+numComments=5
