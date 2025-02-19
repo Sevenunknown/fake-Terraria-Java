@@ -25,7 +25,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private double velocityX = 0;
     private double velocityY = 0;
     private static final double ACCELERATION = 1;
-    private static final double MAX_SPEED = 20;
+    private static final double MAX_SPEED = 5;
     private static final double MAX_FALL_SPEED = 20;
     private static final double FRICTION = 1;
     public static double G = 2;
@@ -110,6 +110,11 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
                 g.setColor(inv[i+1].getColor());
                 g.fillRect(getWidth()/2+i*(InvGridSize)+InvGridSize/4, getHeight()-100-(InvGridSize)+InvGridSize/4, InvGridSize/2, InvGridSize/2);
             }
+            
+            g.setColor(Color.BLACK);
+            int x1 = getWidth()/2+i*(InvGridSize)+1;
+            int y1 =  getHeight()-100;
+            g.drawString(""+player.getInventory().getInventoryNums(i+1),x1, y1);
         }
         
         g.drawLine(getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100);
@@ -327,4 +332,5 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         frame.setVisible(true);
         frame.setResizable(true);
     }
+    
 }

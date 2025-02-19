@@ -21,18 +21,21 @@ public class Inventory
             if (inventory[slot] == null)
             {
                 inventory[slot] = itm;
+                inventoryNums[slot]+=1;
                 didSomething = true;
                 break;
             }
             else if (inventory[slot] == itm && inventoryNums[slot] <= itm.getStackSize())
             {
-                inventoryNums[slot]++;
+                inventoryNums[slot]+=1;
                 didSomething = true;
                 break;
             }
         }
         return didSomething;
     }
+    
+    
     
     public void removeItem(int slot)
     {
@@ -49,6 +52,15 @@ public class Inventory
         return inventory;
     }
     
+    public int[] getInventoryNums()
+    {
+        return inventoryNums;
+    }
+    
+    public int getInventoryNums(int i)
+    {
+        return inventoryNums[i];
+    }
     
     public void printInventory()
     {

@@ -12,7 +12,7 @@ public class Player {
     private static final double MAX_FALL_SPEED = 20;
     private static final double ACCELERATION = 0.5;
     private static final double FRICTION = 0.2;
-    private static final double MAX_SPEED = 20;
+    private static final double MAX_SPEED = 5;
     
     private boolean onGround;
     
