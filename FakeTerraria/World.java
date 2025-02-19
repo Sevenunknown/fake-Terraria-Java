@@ -7,7 +7,7 @@ public class World {
     
     private int skyHeight;
     private int waterLevel;  // New variable to determine where MAGIC_WATER starts
-    private static int SEED = 39;
+    private static int SEED = (int) (Math.random()*1000);
     
     private static final Colors color = new Colors();
     private static final Noise noise = new Noise(SEED);
@@ -127,4 +127,5 @@ public class World {
     public int gridWidth() { return tileWidth; }
     public int gridHeight() { return tileHeight; }
     public int atPos(int i, int j) { return map[i][j]; }
+    public int getSeed() {return SEED;}
 }

@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-
 public class Runner extends JPanel implements ActionListener, KeyListener,  MouseListener {
     private static final int TILE_VIEW_WIDTH = 20;
     private static final int TILE_VIEW_HEIGHT = 25;
@@ -11,7 +10,8 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private static final int worldWidth = 1000;
     private static final int worldHeight = 200;
     
-    
+    public int sceneTracker = 0;
+    // 0 = Game, 1 = settings
     
     private double xOffset = 0;
     private double yOffset = 0;
@@ -62,74 +62,99 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     
         int screenWidth = getWidth();
         int screenHeight = getHeight();
-    
-        // Ensure square tiles
-        int tileSize = Math.min(screenWidth / TILE_VIEW_WIDTH, screenHeight / TILE_VIEW_HEIGHT);
-        tileWidth = tileSize;
-        tileHeight = tileSize;
-    
-        // Calculate how many tiles fit in the view, and add extra coverage to avoid gaps
-        int extraTiles = 30; // Prevents gaps when scrolling
-        int startX = Math.max(0, (int) (xOffset / tileWidth));
-        int startY = Math.max(0, (int) (yOffset / tileHeight));
-        int endX = Math.min(map.getWidth(), startX + TILE_VIEW_WIDTH + extraTiles);
-        int endY = Math.min(map.getHeight(), startY + TILE_VIEW_HEIGHT + extraTiles);
-    
-        for (int i = startY; i < endY; i++) {
-            for (int j = startX; j < endX; j++) {
-                int tileNum = map.atPos(i, j);
-                Color tileColor = NumToColor.get(tileNum);
-                g.setColor(tileColor);
-    
-                int drawX = (j * tileWidth - (int) xOffset);
-                int drawY = (i * tileHeight - (int) yOffset);
-    
-                g.fillRect(drawX, drawY, tileWidth, tileHeight);
-            }
-        }
-    
-        // Draw the player
-        int InvGridSize = 50;
-        Item[] inv = player.getInventoryItems();
-        // Draw Inventory
-        for (int i = -1; i<2; i++)
+        if (sceneTracker == 0)
         {
-            if (i+1 == selectedSlot)
-            {
-                g.setColor(Color.WHITE);
+            drawGame(g);
+        }
+        else if (sceneTracker == 1)
+        {
+            drawSettings(g);
+        }
+    }
+    
+    public void drawSettings(Graphics g)
+    {
+       g.setColor(Color.BLACK);
+       g.setFont(new Font("Arial", Font.PLAIN, 50));
+       g.drawString("SETTINGS", getWidth()/2-100, 100);
+       g.drawString("Seed: " + map.getSeed()+"",  0, 200);
+       g.drawString("World Width: " + map.getWidth()+"",  0, 250);
+       g.drawString("World Height: " + map.getHeight()+"",  0, 300);
+       g.drawString("Position: (" + (int) ((player.getX() + xOffset) / tileWidth) + "," + (map.getHeight()-((int) ((player.getY() + yOffset) / tileWidth)))+")", 0, 350);
+       
+    }
+    
+    public void drawGame(Graphics g)
+    {
+        int screenWidth = getWidth();
+        int screenHeight = getHeight();
+        if (sceneTracker == 0)
+        {
+            // Ensure square tiles
+            int tileSize = Math.min(screenWidth / TILE_VIEW_WIDTH, screenHeight / TILE_VIEW_HEIGHT);
+            tileWidth = tileSize;
+            tileHeight = tileSize;
+        
+            // Calculate how many tiles fit in the view, and add extra coverage to avoid gaps
+            int extraTiles = 30; // Prevents gaps when scrolling
+            int startX = Math.max(0, (int) (xOffset / tileWidth));
+            int startY = Math.max(0, (int) (yOffset / tileHeight));
+            int endX = Math.min(map.getWidth(), startX + TILE_VIEW_WIDTH + extraTiles);
+            int endY = Math.min(map.getHeight(), startY + TILE_VIEW_HEIGHT + extraTiles);
+        
+            for (int i = startY; i < endY; i++) {
+                for (int j = startX; j < endX; j++) {
+                    int tileNum = map.atPos(i, j);
+                    Color tileColor = NumToColor.get(tileNum);
+                    g.setColor(tileColor);
+        
+                    int drawX = (j * tileWidth - (int) xOffset);
+                    int drawY = (i * tileHeight - (int) yOffset);
+        
+                    g.fillRect(drawX, drawY, tileWidth, tileHeight);
+                }
             }
-            else
+        
+            // Draw the player
+            int InvGridSize = 50;
+            Item[] inv = player.getInventoryItems();
+            // Draw Inventory
+            for (int i = -1; i<2; i++)
             {
-                g.setColor(Color.GRAY);
-            }
-            g.fillRect(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, InvGridSize, InvGridSize);
-            g.setColor(Color.BLACK);
-            g.drawLine(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+i*InvGridSize, getHeight()-100);
-            if (inv[i+1] != null)
-            {
-                g.setColor(inv[i+1].getColor());
-                g.fillRect(getWidth()/2+i*(InvGridSize)+InvGridSize/4, getHeight()-100-(InvGridSize)+InvGridSize/4, InvGridSize/2, InvGridSize/2);
+                if (i+1 == selectedSlot)
+                {
+                    g.setColor(Color.WHITE);
+                }
+                else
+                {
+                    g.setColor(Color.GRAY);
+                }
+                g.fillRect(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, InvGridSize, InvGridSize);
+                g.setColor(Color.BLACK);
+                g.drawLine(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+i*InvGridSize, getHeight()-100);
+                if (inv[i+1] != null)
+                {
+                    g.setColor(inv[i+1].getColor());
+                    g.fillRect(getWidth()/2+i*(InvGridSize)+InvGridSize/4, getHeight()-100-(InvGridSize)+InvGridSize/4, InvGridSize/2, InvGridSize/2);
+                }
+                
+                g.setColor(Color.BLACK);
+                int x1 = getWidth()/2+i*(InvGridSize)+1;
+                int y1 =  getHeight()-100;
+                g.drawString(""+player.getInventory().getInventoryNums(i+1),x1, y1);
             }
             
-            g.setColor(Color.BLACK);
-            int x1 = getWidth()/2+i*(InvGridSize)+1;
-            int y1 =  getHeight()-100;
-            g.drawString(""+player.getInventory().getInventoryNums(i+1),x1, y1);
+            g.drawLine(getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100);
+            
+            g.drawLine(getWidth()/2-InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize);
+            g.drawLine(getWidth()/2-InvGridSize, getHeight()-100, getWidth()/2+2*InvGridSize, getHeight()-100);
+                   
+            
+            g.setColor(Color.RED);
+            g.fillRect(screenWidth / 2 - player.getWidth() / 2, player.getY(), player.getWidth(), player.getHeight());
         }
-        
-        g.drawLine(getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100);
-        
-        g.drawLine(getWidth()/2-InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+2*InvGridSize, getHeight()-100-InvGridSize);
-        g.drawLine(getWidth()/2-InvGridSize, getHeight()-100, getWidth()/2+2*InvGridSize, getHeight()-100);
-               
-        
-        g.setColor(Color.RED);
-        g.fillRect(screenWidth / 2 - player.getWidth() / 2, player.getY(), player.getWidth(), player.getHeight());
     }
-
-
-
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         //player.update(0, 0, tileWidth, tileHeight);
@@ -205,6 +230,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (sceneTracker != 0) return;
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_LEFT) leftPressed = true;
         else if (keyCode == KeyEvent.VK_RIGHT) rightPressed = true;
@@ -213,72 +239,76 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
 
     @Override
     public void keyReleased(KeyEvent e) {
+    
         int keyCode = e.getKeyCode();
+        if (sceneTracker == 0 || sceneTracker == 1)
+        {
+            if (keyCode == KeyEvent.VK_LEFT) leftPressed = false;
+            if (keyCode == KeyEvent.VK_RIGHT) rightPressed = false;
+            if (keyCode == KeyEvent.VK_UP) upPressed = false;
+            if (keyCode == KeyEvent.VK_DOWN) downPressed = false;
+            if (keyCode == KeyEvent.VK_SPACE) spacePressed = false;
         
-        if (keyCode == KeyEvent.VK_LEFT) leftPressed = false;
-        if (keyCode == KeyEvent.VK_RIGHT) rightPressed = false;
-        if (keyCode == KeyEvent.VK_UP) upPressed = false;
-        if (keyCode == KeyEvent.VK_DOWN) downPressed = false;
-        if (keyCode == KeyEvent.VK_SPACE) spacePressed = false;
-    
-        if (keyCode == KeyEvent.VK_I) {
-            Inventory INV = player.getInventory();
-            INV.printInventory();
-            System.out.println();
-        }
-    
-        if (keyCode == KeyEvent.VK_P) {
-            placing = !placing;
-            breaking = false;
-            if (placing) selectedSlot = 0;
-            else selectedSlot = -1;
-        }
-    
-        if (keyCode == KeyEvent.VK_B) {
-            breaking = !breaking;
-            placing = false;
-            selectedSlot = -1;
-        }
-    
-        // Selecting inventory slot
-        if (keyCode == KeyEvent.VK_1) {
-            if (selectedSlot == 0)
-            {
-                selectedSlot = -1;
-                placing = false;
+            if (keyCode == KeyEvent.VK_I) {
+                Inventory INV = player.getInventory();
+                INV.printInventory();
+                //System.out.println();
             }
-            else
-            {
-            selectedSlot = 0;
-            placing = true;
-            }  
-        }
-        if (keyCode == KeyEvent.VK_2) {
-            if (selectedSlot == 1)
-            {
-                selectedSlot = -1;
-                placing = false;
+        
+            if (keyCode == KeyEvent.VK_P) {
+                placing = !placing;
+                breaking = false;
+                if (placing) selectedSlot = 0;
+                else selectedSlot = -1;
             }
-            else
-            {
-            selectedSlot = 1;
-            placing = true;
-            }  
-        }
-        if (keyCode == KeyEvent.VK_3) {
-            if (selectedSlot == 2)
-            {
-                selectedSlot = -1;
+        
+            if (keyCode == KeyEvent.VK_B) {
+                breaking = !breaking;
                 placing = false;
+                selectedSlot = -1;
             }
-            else
+        
+            // Selecting inventory slot
+            if (keyCode == KeyEvent.VK_1) {
+                if (selectedSlot == 0)
+                {
+                    selectedSlot = -1;
+                    placing = false;
+                }
+                else
+                {
+                selectedSlot = 0;
+                placing = true;
+                }  
+            }
+            if (keyCode == KeyEvent.VK_2) {
+                if (selectedSlot == 1)
+                {
+                    selectedSlot = -1;
+                    placing = false;
+                }
+                else
+                {
+                selectedSlot = 1;
+                placing = true;
+                }  
+            }
+            if (keyCode == KeyEvent.VK_3) 
             {
-            selectedSlot = 2;
-            placing = true;
-            }   
+                if (selectedSlot == 2)
+                {
+                    selectedSlot = -1;
+                    placing = false;
+                }
+                else
+                {
+                selectedSlot = 2;
+                placing = true;
+                } 
+            }
         }
-    
-        System.out.println("Selected Slot: " + selectedSlot);
+        if (keyCode == KeyEvent.VK_S) sceneTracker = (sceneTracker+1)%2;
+        //System.out.println("Selected Slot: " + selectedSlot);
     }
 
     @Override
@@ -310,7 +340,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
                 player.getInventory().removeItem(selectedSlot);
             }
         }
-        System.out.println("Breaking: " + breaking + " Placing: " + placing + " Slot: " + selectedSlot);
+        //System.out.println("Breaking: " + breaking + " Placing: " + placing + " Slot: " + selectedSlot);
     }
 
     @Override
@@ -322,7 +352,6 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     @Override
     public void mouseClicked(MouseEvent e) {}
 
-    
     public static void main(String[] args) {
         JFrame frame = new JFrame("Runner");
         Runner panel = new Runner();
