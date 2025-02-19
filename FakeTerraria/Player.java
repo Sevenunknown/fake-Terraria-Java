@@ -170,5 +170,4 @@ public class Player {
         return Inv.getInventory();
     }
     
-    
 }

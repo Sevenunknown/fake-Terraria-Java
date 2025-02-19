@@ -29,6 +29,10 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     private static final double MAX_FALL_SPEED = 20;
     private static final double FRICTION = 1;
     public static double G = 2;
+    
+    public boolean breaking = false;
+    public boolean placing = false;
+    public int selectedSlot = -1;
 
     public int tileWidth, tileHeight;
 
@@ -87,9 +91,17 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         // Draw the player
         int InvGridSize = 50;
         Item[] inv = player.getInventoryItems();
+        // Draw Inventory
         for (int i = -1; i<2; i++)
         {
-            g.setColor(Color.GRAY);
+            if (i+1 == selectedSlot)
+            {
+                g.setColor(Color.WHITE);
+            }
+            else
+            {
+                g.setColor(Color.GRAY);
+            }
             g.fillRect(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, InvGridSize, InvGridSize);
             g.setColor(Color.BLACK);
             g.drawLine(getWidth()/2+i*InvGridSize, getHeight()-100-InvGridSize, getWidth()/2+i*InvGridSize, getHeight()-100);
@@ -197,17 +209,71 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
+        
         if (keyCode == KeyEvent.VK_LEFT) leftPressed = false;
         if (keyCode == KeyEvent.VK_RIGHT) rightPressed = false;
         if (keyCode == KeyEvent.VK_UP) upPressed = false;
         if (keyCode == KeyEvent.VK_DOWN) downPressed = false;
         if (keyCode == KeyEvent.VK_SPACE) spacePressed = false;
-        if (keyCode == KeyEvent.VK_I)
-        {
-           Inventory INV = player.getInventory();
-           INV.printInventory();
-           System.out.println();
+    
+        if (keyCode == KeyEvent.VK_I) {
+            Inventory INV = player.getInventory();
+            INV.printInventory();
+            System.out.println();
         }
+    
+        if (keyCode == KeyEvent.VK_P) {
+            placing = !placing;
+            breaking = false;
+            if (placing) selectedSlot = 0;
+            else selectedSlot = -1;
+        }
+    
+        if (keyCode == KeyEvent.VK_B) {
+            breaking = !breaking;
+            placing = false;
+            selectedSlot = -1;
+        }
+    
+        // Selecting inventory slot
+        if (keyCode == KeyEvent.VK_1) {
+            if (selectedSlot == 0)
+            {
+                selectedSlot = -1;
+                placing = false;
+            }
+            else
+            {
+            selectedSlot = 0;
+            placing = true;
+            }  
+        }
+        if (keyCode == KeyEvent.VK_2) {
+            if (selectedSlot == 1)
+            {
+                selectedSlot = -1;
+                placing = false;
+            }
+            else
+            {
+            selectedSlot = 1;
+            placing = true;
+            }  
+        }
+        if (keyCode == KeyEvent.VK_3) {
+            if (selectedSlot == 2)
+            {
+                selectedSlot = -1;
+                placing = false;
+            }
+            else
+            {
+            selectedSlot = 2;
+            placing = true;
+            }   
+        }
+    
+        System.out.println("Selected Slot: " + selectedSlot);
     }
 
     @Override
@@ -222,13 +288,24 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
         int mouseGX = (int) (mouseX + xOffset)/tileWidth;
         int mouseGY = (int) (mouseY + yOffset)/tileHeight;
         Item itm = map.getBrokenItem(map.atPos(mouseGY, mouseGX));
-        if (itm != null)
+        
+        if (itm != null && breaking)
         {
             if (player.giveItem(itm))
             {
                 map.breakBlock(mouseGY, mouseGX);
             }
         }
+        else if (itm == null && placing && selectedSlot != -1)
+        {
+            Item selectedItem = player.getInventoryItems()[selectedSlot];
+            if (selectedItem != null)
+            {
+                map.setPos(mouseGY, mouseGX, selectedItem.getTile());
+                player.getInventory().removeItem(selectedSlot);
+            }
+        }
+        System.out.println("Breaking: " + breaking + " Placing: " + placing + " Slot: " + selectedSlot);
     }
 
     @Override
@@ -240,7 +317,7 @@ public class Runner extends JPanel implements ActionListener, KeyListener,  Mous
     @Override
     public void mouseClicked(MouseEvent e) {}
 
-
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame("Runner");
         Runner panel = new Runner();

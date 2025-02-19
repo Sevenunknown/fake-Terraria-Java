@@ -113,6 +113,7 @@ public class World {
         if (tile == 10) return Items.dirt;
         if (tile == 13) return Items.stone;
         if (tile == 16) return Items.dark_stone;
+        if (tile == 50) return Items.wood;
         return null;
     }
     

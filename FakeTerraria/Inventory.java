@@ -34,11 +34,20 @@ public class Inventory
         return didSomething;
     }
     
+    public void removeItem(int slot)
+    {
+        inventoryNums[slot]-=1;
+        if (inventoryNums[slot] <= 0)
+        {
+            inventoryNums[slot] = 0;
+            inventory[slot] = null;
+        }
+    }
+    
     public Item[] getInventory()
     {
         return inventory;
     }
-    
     
     
     public void printInventory()
